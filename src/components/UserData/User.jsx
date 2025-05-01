@@ -18,7 +18,7 @@ const User = () => {
       );
       setSubscriptionsCount(res.data.subscriptions_count);
     } catch (err) {
-      console.error("Ошибка при получении подписок:", err);
+      console.error(err);
     }
   };
 
@@ -29,7 +29,7 @@ const User = () => {
       );
       setSubscribersCount(res.data.subscribers_count);
     } catch (err) {
-      console.error("Ошибка при получении подписчиков:", err);
+      console.error(err);
     }
   };
 
@@ -41,7 +41,7 @@ const User = () => {
         );
         setPosts(res.data);
       } catch (err) {
-        console.error("Ошибка при получении постов:", err);
+        console.error(err);
       }
     };
 

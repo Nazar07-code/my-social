@@ -5,9 +5,7 @@ export const createPost = createAsyncThunk(
   "posts/createPost",
   async (formData) => {
     const { data } = await instance.post("/posts/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return data;
   }
@@ -44,33 +42,39 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   return data;
 });
 
-// export const fetchComments = createAsyncThunk(
-//   "comments/fetchComments",
-//   async () => {
-//     const { data } = await instance.get(`/comments-post/${postId}`);
-//     return data;
-//   }
-// );
+export const fetchComments = createAsyncThunk(
+  "posts/fetchComments",
+  async (postId) => {
+    const { data } = await instance.get(`/comments-post/${postId}`);
 
-// export const createComment = createAsyncThunk(
-//   "comments/createComment",
-//   async ({ postId, content, parent = null }) => {
-//     const { data } = await instance.post("/comments/", {
-//       content,
-//       post: postId,
-//       parent,
-//     });
-//     return data;
-//   }
-// );
+    return { postId, comments: data };
+  }
+);
+
+export const createComment = createAsyncThunk(
+  "posts/createComment",
+  async ({ postId, content, parent = null }) => {
+    const { data } = await instance.post("/comments/", {
+      content,
+      post: postId,
+      parent,
+    });
+    return data;
+  }
+);
 
 const postsSlice = createSlice({
   name: "posts",
   initialState: {
     items: [],
     status: "loading",
+    comments: null,
   },
-  reducers: {},
+  reducers: {
+    clearComments: (state) => {
+      state.comments = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -85,23 +89,17 @@ const postsSlice = createSlice({
         state.items = [];
       })
       .addCase(createPost.fulfilled, (state, action) => {
-        state.items.push(action.payload);
+        state.items.unshift(action.payload);
       })
-      // .addCase(fetchComments.pending, (state) => {
-      //   state.status = "loading";
-      // })
-      // .addCase(fetchComments.fulfilled, (state, action) => {
-      //   state.status = "loaded";
-      //   state.items = action.payload;
-      // })
-      // .addCase(fetchComments.rejected, (state) => {
-      //   state.status = "error";
-      //   state.items = [];
-      // })
-      // .addCase(createComment.fulfilled, (state, action) => {
-      //   state.items.push(action.payload);
-      // });
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.comments = action.payload;
+      })
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.comments.comments = [...state.comments.comments, action.payload];
+      });
   },
 });
+
+export const { clearComments } = postsSlice.actions;
 
 export const postsReducer = postsSlice.reducer;

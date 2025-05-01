@@ -7,6 +7,7 @@ import "./Post.css";
 
 const UserPosts = () => {
   const user = useSelector((state) => state.auth.data?.user);
+  
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {

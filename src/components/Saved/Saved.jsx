@@ -7,6 +7,7 @@ import "./Saved.css";
 
 const Saved = () => {
   const user = useSelector((state) => state.auth.data?.user);
+  
   const [savedPosts, setSavedPosts] = useState([]);
 
   useEffect(() => {

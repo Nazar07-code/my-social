@@ -8,6 +8,7 @@ import { fetchAuth, selectIsAuth } from "../../redux/slices/auth";
 const Login = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
+  
   const [isPasswordShown, setIsPasswordShown] = React.useState(false);
 
   const {

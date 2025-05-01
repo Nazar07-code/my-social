@@ -1,5 +1,5 @@
 .main-posts {
-    margin: 0 auto 60px;
+    margin: 30px auto;
 
     .main-post {
         background-color: #393E46;
@@ -13,10 +13,13 @@
         .description {
             font-size: 15px;
             font-weight: 400;
-            max-height: 150px;
-            overflow-y: auto;
             width: 100%;
             word-wrap: break-word;
+            overflow: hidden;
+
+            .height-auto {
+                height: auto;
+            }
         }
 
         .btns {

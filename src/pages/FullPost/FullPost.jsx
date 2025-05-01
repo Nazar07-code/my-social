@@ -7,6 +7,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Skeleton from "@mui/material/Skeleton";
 
 import { Comments } from "../../components/Comments/Comment";
 import {
@@ -14,18 +15,22 @@ import {
   postSave,
   postLikeDelete,
   postSaveDelete,
+  clearComments,
 } from "../../redux/slices/posts";
+
 import instance from "../../axios";
 import "./FullPost.css";
 
 const PostDetails = () => {
-  const { id } = useParams();
   const [isLiked, setIsLiked] = useState({});
   const [isSaved, setIsSaved] = useState({});
-  const navigate = useNavigate();
+  const [expandedPosts, setExpandedPosts] = useState({});
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const [commentsChangeModal, setCommentsChangeModal] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.data?.user);
 
@@ -116,12 +121,39 @@ const PostDetails = () => {
     }
   };
 
-  const changeComments = () => {
+  const changeComments = (postId) => {
+    setSelectedPostId(postId);
     setCommentsChangeModal((prev) => !prev);
   };
 
   if (loading || !post) {
-    return <div>Загрузка...</div>;
+    return (
+      <div className="full-post w-[600px] flex flex-col gap-5 overflow-hidden mx-auto mt-10">
+        <Skeleton
+          variant="rectangular"
+          className="w-full max-h-[600px]"
+          sx={{ height: { xs: 300, sm: 400, md: 500 } }}
+        />
+        <div className="p-4 flex flex-col gap-4">
+          <div className="user flex gap-4 items-center">
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="text" width={120} height={30} />
+          </div>
+          <div className="tags flex flex-wrap gap-2">
+            <Skeleton variant="text" width={60} />
+            <Skeleton variant="text" width={50} />
+            <Skeleton variant="text" width={70} />
+          </div>
+          <Skeleton variant="text" width="100%" height={30} />
+          <Skeleton variant="text" width="90%" height={30} />
+          <div className="btns flex items-center justify-end gap-5">
+            <Skeleton variant="circular" width={30} height={30} />
+            <Skeleton variant="circular" width={30} height={30} />
+            <Skeleton variant="circular" width={30} height={30} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -172,7 +204,7 @@ const PostDetails = () => {
         <div className="user flex gap-4 items-center">
           <img
             className="rounded-full w-10 h-10"
-            src={post.avatar || "/images/avatar-default.svg"}
+            src={post.user?.avatar || "/images/avatar-default.svg"}
             alt="avatar"
           />
           <h1 className="cursor-pointer text-[20px] font-semibold">
@@ -185,12 +217,32 @@ const PostDetails = () => {
             .map((tag, idx) => tag.trim())
             .filter((tag) => tag)
             .map((tag, idx) => (
-              <span key={idx} className="cursor-pointer text-blue-700">
+              <span key={idx} className="cursor-pointer text-blue-300">
                 #{tag}
               </span>
             ))}
         </div>
-        <p className="description">{post.description}</p>
+        <p
+          className={`description transition-all duration-900 ${
+            expandedPosts[post.id] ? "h-auto" : "max-h-[100px] overflow-hidden"
+          }`}
+        >
+          {post.description}
+        </p>
+        {post.description.length > 200 && (
+          <button
+            className="text-blue-500 text-sm mt-2 self-start"
+            onClick={() =>
+              setExpandedPosts((prev) => ({
+                ...prev,
+                [post.id]: !prev[post.id],
+              }))
+            }
+          >
+            {expandedPosts[post.id] ? "Close" : "More"}
+          </button>
+        )}
+
         <div className="btns flex items-center justify-end gap-5">
           <button onClick={() => liked(post)} className="like-btn">
             <img
@@ -212,13 +264,20 @@ const PostDetails = () => {
               alt="Save"
             />
           </button>
-          <button onClick={changeComments} className="comment-btn">
+          <button
+            onClick={() => {
+              dispatch(clearComments());
+              changeComments(post.id);
+            }}
+            className="comment-btn"
+          >
             <img src="/images/comment.svg" alt="Comment" />
           </button>
         </div>
       </div>
       <Comments
-        changeComments={changeComments}
+        postId={selectedPostId}
+        changeComments={() => setCommentsChangeModal(false)}
         commentsChangeModal={commentsChangeModal}
       />
     </div>

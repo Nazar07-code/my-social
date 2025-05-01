@@ -11,10 +11,9 @@ function EditMe() {
   const navigate = useNavigate();
 
   const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
-  const [avatar, setAvatar] = useState(null);
   const [name, setName] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [avatar, setAvatar] = useState(null);
   const [password, setPassword] = useState("");
 
   const handleAvatarChange = (e) => {

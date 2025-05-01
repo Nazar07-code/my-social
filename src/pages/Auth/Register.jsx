@@ -38,7 +38,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) return alert("Пароли не совпадают!");
+    if (password !== confirmPassword) return alert("Passwords don't match");
     if (password.length < 4) return alert("Password length less than 4");
 
     const formData = new FormData();
@@ -56,13 +56,13 @@ function Register() {
     const res = await dispatch(fetchRegister(formData));
 
     if (!res.payload || res.payload.message !== "Пользователь создан") {
-      return alert("Ошибка при регистрации");
+      return alert("Register error");
     }
 
     const loginRes = await dispatch(fetchAuth({ email, password }));
 
     if (!loginRes.payload || !loginRes.payload.token) {
-      return alert("Ошибка при авторизации после регистрации");
+      return alert("Autrh error");
     }
 
     window.localStorage.setItem("token", loginRes.payload.token);

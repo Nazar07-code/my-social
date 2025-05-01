@@ -4,10 +4,10 @@
     top: 0;
     width: 480px;
     height: 100%;
-    background-color: #3F2E3E;
+    background-color: #393E46;
     transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    color: #e8e8e8;
     z-index: 99;
+    overflow-y: scroll;
 }
 
 .comments.open {
@@ -20,8 +20,9 @@
     width: 30px;
     right: 10px;
 }
+
 @media (max-width:768px) {
-    .comments{
+    .comments {
         width: 100%;
     }
 }

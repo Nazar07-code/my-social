@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import "./Favorite.css";
 
@@ -20,7 +20,7 @@ const Favorites = () => {
         posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setFavoritePosts(posts);
       } catch (err) {
-        console.error("Ошибка при получении понравившихся постов:", err);
+        console.error(err);
       }
     };
 

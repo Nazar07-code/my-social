@@ -19,14 +19,14 @@
 
     input {
         width: 100%;
-        background-color: #3F2E3E;
+        background-color: #393E46;
         padding: 20px;
         border-radius: 20px;
     }
 
     .description-input {
         border-radius: 20px;
-        background-color: #3F2E3E;
+        background-color: #393E46;
         outline: none;
     }
 
@@ -34,12 +34,12 @@
         color: #EFE1D1;
         padding: 20px;
         border-radius: 20px;
-        background-color: #A78295;
+        background-color: #335791;
         transition: all .2s linear;
         cursor: pointer;
 
         &:hover {
-            background-color: #a87690;
+            background-color: #3f31bb;
         }
     }
 }

@@ -2,15 +2,16 @@ import React from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 
-import "./Header.css";
 import { selectIsAuth } from "../../redux/slices/auth";
+
+import "./Header.css";
 
 const Header = () => {
   const isAuth = useSelector(selectIsAuth);
   const user = useSelector((state) => state.auth.data?.user);
 
   return (
-    <div className="header">
+    <div className="header py-2 px-5 flex justify-between items-center">
       <Link to="/" className="logo cursor-pointer">
         <img className="w-[50px]" src="/images/logo.svg" alt="logo" />
       </Link>
